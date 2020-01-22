@@ -1,0 +1,7 @@
+Aula 5 - Cenário normal, o browser é o runtime do JavaScript. No caso do NodeJS o papel do browser é feito pelo NodeJS... que vira o Runtime para o JavaScript usando a V8 JavaScript Engine (By Google).
+Isso nos possiblita usar o NodeJs como um servidor web, pq agora podemos acessar um sistema de arquivos e outras coisas, dando-nos mais rapidez na construção de aplicações back-end.
+
+Quando usar - Streaming (YouTube, Netflix), api com noSQL bancos, chats.
+Quando não usar - processamento pesado do lado do servidor.
+
+CallBack - node usa bastante por causa do processamento assincrono.
