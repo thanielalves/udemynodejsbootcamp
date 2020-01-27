@@ -1,5 +1,6 @@
-const fs = require('fs');
-const http = require('http');
+const fs = require('fs'); //modulo de arquivos
+const http = require('http');//modulo do server web
+const url = require('url');//manipulador de rotas
 
 ////////////////////////////////////////////
 ///FILES
