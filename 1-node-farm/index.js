@@ -28,8 +28,32 @@ const url = require('url');//manipulador de rotas
 
 ////////////////////////////////////////////
 ///SERVER
-const server = http.createServer((req, res) => {
-    res.end('Hello from the Server!!');
+//Le o arquivo de forma sincrona
+const data = fs.readFileSync(`${__dirname}/dev-data/data.json`, 'utf-8');
+const dataObj = JSON.parse(data); //formata o arquivo em obj JSON
+
+const server = http.createServer((req, res) => {    
+    const pathName = req.url;
+
+    if(pathName === '/' || pathName === '/overview'){
+        res.end('This is the OVERVIEW!!');    
+    }else if(req.url === '/products'){
+        res.end('This is the PRODUCT!!');
+    }else if(req.url === '/api'){
+
+        console.log(__dirname);//devolve o diretorio local de execução da aplicação 
+
+        res.writeHead(200,{'Content-Type': 'application/json'});
+        res.end(data);
+    }
+    else{
+        res.writeHead(404,{ //devolvendo cabeçalhos http personalizado
+            'Content-Type': 'text/html',
+            'my-own-header': 'hello-world'
+        });
+        res.end('<h1>Page not found.</h1>');
+    }
+    
 });
 
 server.listen(8000, '127.0.0.1',() => {
