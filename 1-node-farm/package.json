@@ -4,8 +4,16 @@
   "description": "Learning node.js",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "nodemon index.js"
   },
   "author": "Thaniel Alves",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "": "<--dependencia para urls amigaveis",
+    "slugify": "^1.3.6"
+  },
+  "devDependencies": {
+    "": "<--reinicia server ao salvar qualquer mudanca no código",
+    "nodemon": "^2.0.2"
+  }
 }

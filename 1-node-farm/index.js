@@ -43,7 +43,6 @@ const dataObj = JSON.parse(data); //formata o arquivo em obj JSON
 
 const server = http.createServer((req, res) => {    
     const { query, pathname} = url.parse(req.url,true);
-    
     // const pathName = req.url;
     
     //Overview page
