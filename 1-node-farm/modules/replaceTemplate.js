@@ -1,5 +1,5 @@
 module.exports = (temp, product)=>{
-    // //g expressao regular para sub. todas as ocorrências
+    // //g expressao regular para sub. todas as ocorrências como se fosse um loop
     let output = temp.replace(/{%PRODUCTNAME%}/g,product.productName);
     output = output.replace(/{%IMAGE%}/g,product.image);
     output = output.replace(/{%PRICE%}/g,product.price);
