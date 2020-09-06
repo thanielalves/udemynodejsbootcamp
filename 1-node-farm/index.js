@@ -1,8 +1,8 @@
 //Módulos do core do node
 const fs = require('fs'); //modulo de arquivos
-const http = require('http');//modulo do server web
-const url = require('url');//manipulador de rotas
-const slugify = require('slugify');//urls amigáveis
+const http = require('http'); //modulo do server web
+const url = require('url'); //manipulador de rotas
+const slugify = require('slugify'); //urls amigáveis
 
 //Módulos próprios
 const replaceTemplate = require('./modules/replaceTemplate');
@@ -27,7 +27,7 @@ const replaceTemplate = require('./modules/replaceTemplate');
 //                 console.log('You file has been written @');
 //             })
 //         });
-//     });    
+//     });
 // });
 // console.log('Will read file!!');
 
@@ -35,54 +35,62 @@ const replaceTemplate = require('./modules/replaceTemplate');
 ///SERVER
 
 //Le o arquivo de forma sincrona
-const tempOverview = fs.readFileSync(`${__dirname}/templates/template-overview.html`, 'utf-8');
-const tempCard = fs.readFileSync(`${__dirname}/templates/template-card.html`, 'utf-8');
-const tempProduct = fs.readFileSync(`${__dirname}/templates/template-product.html`, 'utf-8');
+const tempOverview = fs.readFileSync(
+  `${__dirname}/templates/template-overview.html`,
+  'utf-8'
+);
+const tempCard = fs.readFileSync(
+  `${__dirname}/templates/template-card.html`,
+  'utf-8'
+);
+const tempProduct = fs.readFileSync(
+  `${__dirname}/templates/template-product.html`,
+  'utf-8'
+);
 
 const data = fs.readFileSync(`${__dirname}/dev-data/data.json`, 'utf-8');
 const dataObj = JSON.parse(data); //formata o arquivo em obj JSON
 
-const slug = dataObj.map(el => slugify(el.productName,{lower: true}));
+const slug = dataObj.map((el) => slugify(el.productName, { lower: true }));
 console.log(slug);
 
-const server = http.createServer((req, res) => {    
-    const { query, pathname} = url.parse(req.url,true);
-    // const pathName = req.url;
-    
-    //Overview page
-    if(pathname === '/' || pathname === '/overview'){
-        res.writeHead(200,{'Content-Type': 'text/html'});
-        const cardsHtml = dataObj.map(el => replaceTemplate(tempCard,el));
-        const output = tempOverview.replace('{%PRODUCT_CARDS%}',cardsHtml);
-        res.end(output);    
-    
+const server = http.createServer((req, res) => {
+  const { query, pathname } = url.parse(req.url, true);
+  // const pathName = req.url;
+
+  //Overview page
+  if (pathname === '/' || pathname === '/overview') {
+    res.writeHead(200, { 'Content-Type': 'text/html' });
+    const cardsHtml = dataObj.map((el) => replaceTemplate(tempCard, el));
+    const output = tempOverview.replace('{%PRODUCT_CARDS%}', cardsHtml);
+    res.end(output);
+
     //Product page
-    }else if(pathname === '/product'){
-        res.writeHead(200,{'Content-Type': 'text/html'});
-        const product = dataObj[query.id]; //recupera o produto do array na posição query.id
-        const output = replaceTemplate(tempProduct,product);
-        res.end(output);    
-    
+  } else if (pathname === '/product') {
+    res.writeHead(200, { 'Content-Type': 'text/html' });
+    const product = dataObj[query.id]; //recupera o produto do array na posição query.id
+    const output = replaceTemplate(tempProduct, product);
+    res.end(output);
+
     //API
-    }else if(pathname === '/api'){
+  } else if (pathname === '/api') {
+    console.log(__dirname); //devolve o diretorio local de execução da aplicação
 
-        console.log(__dirname);//devolve o diretorio local de execução da aplicação 
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(data);
+  }
 
-        res.writeHead(200,{'Content-Type': 'application/json'});
-        res.end(data);
-    }
-
-    //Not found page
-    else{
-        res.writeHead(404,{ //devolvendo cabeçalhos http personalizado
-            'Content-Type': 'text/html',
-            'my-own-header': 'hello-world'
-        });
-        res.end('<h1>Page not found.</h1>');
-    }
-    
+  //Not found page
+  else {
+    res.writeHead(404, {
+      //devolvendo cabeçalhos http personalizado
+      'Content-Type': 'text/html',
+      'my-own-header': 'hello-world',
+    });
+    res.end('<h1>Page not found.</h1>');
+  }
 });
 
-server.listen(8000, '127.0.0.1',() => {
-    console.log('Listening to requests on port 8000.');
+server.listen(8000, '127.0.0.1', () => {
+  console.log('Listening to requests on port 8000.');
 });
