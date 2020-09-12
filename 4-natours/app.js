@@ -3,15 +3,32 @@
 const express = require('express');
 //Le arquivos
 const fs = require('fs');
+//Manipula saida do console
+const morgan = require('morgan');
 
 //Funcao que cria instancia do express
 const app = express();
 
+//MIDDLEWARE
+
+app.use(morgan('dev'));
+
 //Middleware faz a ponte entre a requisição e a resposta
 app.use(express.json());
 
-//Rotas
+//Manipulação de Middleware padrão. Sempre definir os tres parametros req,res,next
+app.use((req, res, next) => {
+  console.log('Oi estou na middleware..');
+  next();
+});
 
+app.use((req, res, next) => {
+  // req.requestTime = new Date().toUTCString();
+  req.requestTime = new Date().toISOString();
+  next();
+});
+
+//MANIPULAÇÃO DAS ROTAS
 //Lendo o arquivo (tours-simple) e convertendo para JSON
 const tours = JSON.parse(
   fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`)
@@ -19,8 +36,11 @@ const tours = JSON.parse(
 
 //Funcoes para as rotas
 const getAllTours = (req, res) => {
+  console.log(req.requestTime);
+
   res.status(200).json({
     status: 'success',
+    requestedAt: req.requestTime,
     result: tours.length,
     data: {
       tours,
@@ -109,17 +129,74 @@ const deleteTour = (req, res) => {
   });
 };
 
+const getAllUsers = (req, res) => {
+  res.status(500).json({
+    status: 'error',
+    message: 'Não implementado ainda.',
+  });
+};
+//Users functions
+const getNovo = (req, res) => {
+  console.log(req.requestTime);
+
+  res.status(200).json({
+    status: 'success',
+    requestedAt: req.requestTime,
+    result: tours.length,
+    data: {
+      tours,
+    },
+  });
+};
+
+const getUser = (req, res) => {
+  res.status(500).json({
+    status: 'error',
+    message: 'Não implementado ainda.',
+  });
+};
+
+const createUser = (req, res) => {
+  res.status(500).json({
+    status: 'error',
+    message: 'Não implementado ainda.',
+  });
+};
+
+const updateUser = (req, res) => {
+  res.status(500).json({
+    status: 'error',
+    message: 'Não implementado ainda.',
+  });
+};
+
+const deleteUser = (req, res) => {
+  res.status(500).json({
+    status: 'error',
+    message: 'Não implementado ainda.',
+  });
+};
+
+//ROTAS
+const tourRouter = express.Router();
+const userRouter = express.Router();
+
+//Tours
 //Busca todos ou grava novo tour
-app.route('/ap1/v1/tours').get(getAllTours).post(postTour);
+tourRouter.route('/').get(getAllTours).post(postTour);
 
 //Busca objeto pelo id
-app.route('/ap1/v1/tours/:id').get(getById);
+tourRouter.route('/:id').get(getById).patch(updateTour).delete(deleteTour);
 
-//Update Fake
-app.route('/ap1/v1/tours/:id').patch(updateTour);
+//Users
+userRouter.route('/').get(getAllUsers).post(createUser);
 
-//Delete Fake
-app.route('/ap1/v1/tours/:id').delete(deleteTour);
+userRouter.route('/:id').get(getUser).patch(updateUser).delete(deleteUser);
+
+app.use('/ap1/v1/users/', userRouter);
+app.use('/ap1/v1/tours/', tourRouter);
+
+//SERVER
 
 //Servidor escutando na porta 3000
 const port = 3000;
