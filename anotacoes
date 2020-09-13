@@ -5,3 +5,14 @@ Quando usar - Streaming (YouTube, Netflix), api com noSQL bancos, chats.
 Quando não usar - processamento pesado do lado do servidor.
 
 CallBack - node usa bastante por causa do processamento assincrono.
+
+Middleware
+- sempre verificar a ordem dos parametros (req,res,next,val);
+- não esquecer de declarar a funcao next() para ir para a proxima Middleware
+
+//STATUS
+200 - ok
+201 - recurso criado
+400 - bad request; requisição mal feita
+404 - recurso não encontrado
+500 - erro no servidor
