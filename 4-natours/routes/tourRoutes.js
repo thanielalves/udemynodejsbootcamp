@@ -20,5 +20,8 @@ router
   .patch(tourController.updateTour)
   .delete(tourController.deleteTour);
 
+//Busca um usuario teste
+router.route('/delivery').get(tourController.getUserTeste);
+
 //Necessario para ser importado no arquivo principal
 module.exports = router;
